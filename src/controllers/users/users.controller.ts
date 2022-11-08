@@ -1,14 +1,26 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 @Controller('users')
 export class UsersController {
   @Get()
   getUsers() {
-    return `retornando la lista de usuarios existentes`;
+    return {
+      message: 'retornando la lista de usuarios existentes',
+    };
   }
 
   @Get(':id')
   getUserId(@Param('id') id: number) {
-    return `El id del usuario es ${id}`;
+    return {
+      message: `El id del usuario es ${id}`,
+    };
+  }
+
+  @Post()
+  create(@Body() payload: any) {
+    return {
+      message: 'create user',
+      payload,
+    };
   }
 }
