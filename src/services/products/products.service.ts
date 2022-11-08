@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from '../../entities/product.entity';
 
 @Injectable()
@@ -20,7 +20,12 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    return this.products.find((element) => element.id == id);
+    const product = this.products.find((element) => element.id == id);
+    if (!product) {
+      //manipulando los errores propios de nestJS
+      throw new NotFoundException(`El producto con el id ${id} no existe`);
+    }
+    return product;
   }
 
   create(payload: any) {
@@ -34,37 +39,36 @@ export class ProductsService {
   }
 
   search(name: string) {
-    return this.products.filter((element) => element.name == name);
+    const includeSearch = this.products.filter(
+      (element) => element.name == name,
+    );
+    if (includeSearch.length == 0) {
+      throw new NotFoundException(
+        `No existen coincidencias con el nombre ${name}`,
+      );
+    }
+    return includeSearch;
   }
 
   update(id: number, payload: any) {
-    let product = this.findOne(id);
-    if (!product) {
-      return {
-        message: `Producto con id ${id} no existe`,
-      };
-    } else {
-      const index = this.products.indexOf(product);
-      product = {
-        ...product,
-        ...payload,
-      };
-      this.products[index] = product;
-      return product;
+    const product = this.findOne(id);
+    const index = this.products.findIndex((item) => item.id == id);
+    if (index == -1) {
+      throw new NotFoundException(`El producto con el id ${id} no existe`);
     }
+    this.products[index] = {
+      ...product,
+      ...payload,
+    };
+    return this.products[index];
   }
 
-  delete(id) {
-    let productId = this.findOne(id);
-    if (!productId) {
-      return {
-        message: `Producto con id ${id} no existe`,
-      };
-    } else {
-      const product = this.findOne(id);
-      const index = this.products.indexOf(product);
-      this.products.splice(index, index);
+  delete(id: number) {
+    const index = this.products.findIndex((item) => item.id == id);
+    if (index == -1) {
+      throw new NotFoundException(`El producto con el id ${id} no existe`);
     }
+    this.products.splice(index, 1);
     return `El producto con id ${id} fue eliminado satisfactoriamente`;
   }
 }
