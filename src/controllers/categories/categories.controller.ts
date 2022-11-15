@@ -1,19 +1,41 @@
-import { Body, Get, Post } from '@nestjs/common';
+import { Body, Delete, Get, Post, Put } from '@nestjs/common';
 import { Controller, Param } from '@nestjs/common';
+import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
+import { CreateCategoryDto, UpdateCategoryDto } from 'src/dtos/categories.dto';
+import { CategoriesService } from 'src/services/categories/categories.service';
 
 @Controller('categories')
 export class CategoriesController {
+  constructor(private categoriesService: CategoriesService) {}
+  @Get()
+  getCategories() {
+    return this.categoriesService.findAllCategory();
+  }
+
   @Get(':id/products/:productId')
   // se llama los parámetros dentro del atributo del método
-  getCategory(@Param('id') id: number, @Param('productId') productId: number) {
-    return `product ${productId} and category ${id}`;
+  getProductCategory(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('productId', ParseIntPipe) productId: number,
+  ) {
+    return this.categoriesService.findProductCategory(id, productId);
   }
 
   @Post()
-  create(@Body() payload: any) {
-    return {
-      message: 'create categories',
-      payload,
-    };
+  create(@Body() payload: CreateCategoryDto) {
+    return this.categoriesService.create(payload);
+  }
+
+  @Put(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateCategoryDto,
+  ) {
+    return this.categoriesService.update(id, payload);
+  }
+
+  @Delete(':id')
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.delete(id);
   }
 }

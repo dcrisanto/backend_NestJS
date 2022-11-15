@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateProductDto, UpdateProductDto } from 'src/dtos/products.dto';
 import { Product } from '../../entities/product.entity';
 
 @Injectable()
@@ -8,6 +9,7 @@ export class ProductsService {
     {
       id: 1,
       name: 'Product1',
+      category: 'category1',
       description: 'description product',
       price: 260,
       stock: 12,
@@ -20,7 +22,7 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    const product = this.products.find((element) => element.id == id);
+    const product = this.products.find((element) => element.id === id);
     if (!product) {
       //manipulando los errores propios de nestJS
       throw new NotFoundException(`El producto con el id ${id} no existe`);
@@ -28,9 +30,9 @@ export class ProductsService {
     return product;
   }
 
-  create(payload: any) {
+  create(payload: CreateProductDto) {
     this.counterId++;
-    const newProduct: Product = {
+    const newProduct = {
       id: this.counterId,
       ...payload,
     };
@@ -40,7 +42,7 @@ export class ProductsService {
 
   search(name: string) {
     const includeSearch = this.products.filter(
-      (element) => element.name == name,
+      (element) => element.name === name,
     );
     if (includeSearch.length == 0) {
       throw new NotFoundException(
@@ -50,9 +52,9 @@ export class ProductsService {
     return includeSearch;
   }
 
-  update(id: number, payload: any) {
+  update(id: number, payload: UpdateProductDto) {
     const product = this.findOne(id);
-    const index = this.products.findIndex((item) => item.id == id);
+    const index = this.products.findIndex((item) => item.id === id);
     if (index == -1) {
       throw new NotFoundException(`El producto con el id ${id} no existe`);
     }
@@ -64,7 +66,7 @@ export class ProductsService {
   }
 
   delete(id: number) {
-    const index = this.products.findIndex((item) => item.id == id);
+    const index = this.products.findIndex((item) => item.id === id);
     if (index == -1) {
       throw new NotFoundException(`El producto con el id ${id} no existe`);
     }
