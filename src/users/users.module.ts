@@ -6,6 +6,7 @@ import { CustomersController } from './controllers/customers.controller';
 import { UsersController } from './controllers/users.controller';
 
 @Module({
+  //importamos ProductsModule para poder usar ProductsService en UsersServices
   imports: [ProductsModule],
   controllers: [UsersController, CustomersController],
   providers: [UsersService, CustomersService],
