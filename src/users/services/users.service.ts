@@ -25,7 +25,8 @@ export class UsersService {
   ];
 
   findAll() {
-    const apiKey = this.configService.get('API_KEY');
+    //también lo puedes tipar indicando que recibes un string
+    const apiKey = this.configService.get<string>('API_KEY');
     console.log(apiKey);
     return this.users;
   }
