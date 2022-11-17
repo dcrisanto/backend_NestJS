@@ -5,12 +5,14 @@ import {
   IsNotEmpty,
   IsPositive,
 } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
+//import { PartialType } from '@nestjs/mapped-types';
+//Para documentar los dto se debe coger el PartialType del paquete de swagger
+import { PartialType } from '@nestjs/swagger';
 
 export class CreateProductDto {
   //propiedades que no pueden ser modificadas con readonly en tiempo de desarrollo, por ejemplo cuando lo deseamos cambiar en services una de estas propiedades no lo permitirá
   // Pero al enviar el request al servicio no lo valida
-  //validación que sea string en tiempo de ejecución
+  //validación que sea string en tiempo de ejecución: al enviar el request al servicio
   @IsString()
   //validando que no sea vacío
   @IsNotEmpty()

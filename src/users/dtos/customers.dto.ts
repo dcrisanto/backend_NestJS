@@ -1,11 +1,22 @@
+import { PartialType } from '@nestjs/mapped-types';
+import { IsNotEmpty, IsString } from 'class-validator';
+
 export class CreateCustomerDto {
+  @IsString()
+  @IsNotEmpty()
   readonly name: string;
+
+  @IsString()
+  @IsNotEmpty()
   readonly email: string;
+
+  @IsString()
+  @IsNotEmpty()
   readonly user: string;
 }
 
-export class UpdateCustomerDto {
-  readonly name?: string;
+export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {
+  /* readonly name?: string;
   readonly email?: string;
-  readonly user?: string;
+  readonly user?: string; */
 }
