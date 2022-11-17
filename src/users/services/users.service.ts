@@ -1,9 +1,12 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
 import { ProductsService } from 'src/products/services/products.service';
 import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dto';
 import { User } from 'src/users/entities/user.entity';
 import { Order } from '../entities/order.entity';
+//como se ha exportado como export default no es necesario los {}
+import config from '../../config';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +14,7 @@ export class UsersService {
     private productsService: ProductsService,
     //@Inject('API_KEY') private apiKey: string,
     private configService: ConfigService,
+    @Inject(config.KEY) private config_: ConfigType<typeof config>,
   ) {}
 
   private counterId = 1;
@@ -28,6 +32,8 @@ export class UsersService {
     //también lo puedes tipar indicando que recibes un string
     const apiKey = this.configService.get<string>('API_KEY');
     console.log(apiKey);
+    const nameDataBase = this.config_.database.name;
+    console.log(nameDataBase);
     return this.users;
   }
 
