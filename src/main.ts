@@ -25,7 +25,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
-
-  await app.listen(3001);
+  //habilitar los cross para que se puedan realizar peticiones fuera del dominio
+  app.enableCors();
+  await app.listen(process.env.PORT || 3001);
 }
 bootstrap();
