@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Order } from '../entities/order.entity';
 //como se ha exportado como export default no es necesario los {}
 import config from '../../config';
+import { Db } from 'mongodb';
 
 @Injectable()
 export class UsersService {
@@ -15,6 +16,7 @@ export class UsersService {
     //@Inject('API_KEY') private apiKey: string,
     private configService: ConfigService,
     @Inject(config.KEY) private config_: ConfigType<typeof config>,
+    @Inject('MONGO') private database: Db,
   ) {}
 
   private counterId = 1;
@@ -80,9 +82,18 @@ export class UsersService {
   delete(id: number) {
     const index = this.users.findIndex((item) => item.id === id);
     if (index == -1) {
-      throw new NotFoundException(`Se usuario con el id ${id} no existe`);
+      throw new NotFoundException(`El usuario con el id ${id} no existe`);
     }
     this.users.splice(index, 1);
     return `El usuario con el id ${id} fue eliminado satisfactoriamente`;
+  }
+
+  getTasks(id: number) {
+    const index = this.users.findIndex((item) => item.id === id);
+    if (index == -1) {
+      throw new NotFoundException(`El usuario con el id ${id} no existe`);
+    }
+    const tasksCollection = this.database.collection('tasks');
+    return tasksCollection.find().toArray();
   }
 }

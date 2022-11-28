@@ -50,4 +50,9 @@ export class UsersController {
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.userService.delete(id);
   }
+
+  @Get(':id/tasks')
+  getTasks(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.getTasks(id);
+  }
 }

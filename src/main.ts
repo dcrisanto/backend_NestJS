@@ -27,6 +27,6 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
   //habilitar los cross para que se puedan realizar peticiones fuera del dominio
   app.enableCors();
-  await app.listen(process.env.PORT || 3001);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
