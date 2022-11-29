@@ -24,16 +24,16 @@ export class UsersController {
   }
 
   @Get(':id')
-  getUser(@Param('id', ParseIntPipe) id: number) {
+  getUser(@Param('id') id: string) {
     return this.userService.findUser(id);
   }
 
   @Get(':id/orders')
-  getOrders(@Param('id', ParseIntPipe) id: number) {
+  getOrders(@Param('id') id: string) {
     return this.userService.getOrdersByUser(id);
   }
 
-  @Post()
+  /*  @Post()
   create(@Body() payload: CreateUserDto) {
     return this.userService.create(payload);
   }
@@ -54,5 +54,5 @@ export class UsersController {
   @Get(':id/tasks')
   getTasks(@Param('id', ParseIntPipe) id: number) {
     return this.userService.getTasks(id);
-  }
+  } */
 }

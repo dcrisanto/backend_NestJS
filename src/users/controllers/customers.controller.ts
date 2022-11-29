@@ -28,11 +28,11 @@ export class CustomersController {
   }
 
   @Get(':id')
-  getCustomer(@Param('id', ParseIntPipe) id: number) {
+  getCustomer(@Param('id') id: string) {
     return this.customersService.findOne(id);
   }
 
-  @Post()
+  /*  @Post()
   create(@Body() payload: CreateCustomerDto) {
     return this.customersService.create(payload);
   }
@@ -48,5 +48,5 @@ export class CustomersController {
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.customersService.delete(id);
-  }
+  } */
 }

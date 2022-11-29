@@ -1,54 +1,55 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import { CreateBrandDto, UpdateBrandDto } from 'src/products/dtos/brands.dto';
 import { Brand } from 'src/products/entities/brand.entity';
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class BrandsService {
-  private counterId = 1;
-  private counterProductId = 1;
-  private brands: Brand[] = [
-    {
-      id: 1,
-      name: 'Renzo Costa',
-      products: [],
-      /* products: [
-        {
-          id: 1,
-          name: 'cartera',
-          category: 'accesorios',
-          description: 'productos de cuero de calidad',
-          price: 200,
-          stock: 50,
-          image: '',
-        },
-      ], */
-    },
-  ];
+  constructor(
+    @InjectModel(Brand.name) private brandModel: Model<Brand>,
+    @InjectModel(Product.name) private productModel: Model<Product>,
+  ) {}
 
   findAll() {
-    const brands = this.brands.map((element) => element.name);
-    return brands;
+    return this.brandModel.find().exec();
   }
 
-  findOne(id: number, productId: number) {
-    const brand = this.brands.find((item) => item.id === id);
+  async findOne(id: string) {
+    const brand = await this.brandModel.findById(id).exec();
     if (!brand) {
       throw new NotFoundException(`No existe la marca con el id ${id}`);
     }
-    const product = brand.products.find((item) => item.id === productId);
-    if (!product) {
+    return brand;
+  }
+
+  async findBrandProduct(id: string, productId: string) {
+    const brand = await this.brandModel.findById(id).exec();
+    if (!brand) {
+      throw new NotFoundException(`No existe la marca con el id ${id}`);
+    }
+    const idProduct = brand.products.find((item) => item === productId);
+    if (!idProduct) {
       throw new NotFoundException(
         `El producto con el id ${productId} no existe`,
       );
     }
+    const product = await this.productModel.findById(productId).exec();
+    if (!product) {
+      throw new NotFoundException(
+        `El producto con el id ${productId} no está disponible para la marca ${brand.name}`,
+      );
+    }
     return {
-      id: brand.id,
+      id,
       name: brand.name,
-      product: product,
+      product,
     };
   }
 
-  create(payload: CreateBrandDto) {
+  /* create(payload: CreateBrandDto) {
     this.counterId++;
     if (!payload.products) {
       const newBrand = {
@@ -92,5 +93,5 @@ export class BrandsService {
     }
     this.brands.splice(index, 1);
     return `La marca con el id ${id} fue eliminado satisfactoriamente`;
-  }
+  } */
 }

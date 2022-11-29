@@ -18,16 +18,21 @@ export class CategoriesController {
     return this.categoriesService.findAllCategory();
   }
 
+  @Get(':id')
+  getCategory(@Param('id') id: string) {
+    return this.categoriesService.findOne(id);
+  }
+
   @Get(':id/products/:productId')
   // se llama los parámetros dentro del atributo del método
   getProductCategory(
-    @Param('id', ParseIntPipe) id: number,
-    @Param('productId', ParseIntPipe) productId: number,
+    @Param('id') id: string,
+    @Param('productId') productId: string,
   ) {
     return this.categoriesService.findProductCategory(id, productId);
   }
 
-  @Post()
+  /*  @Post()
   create(@Body() payload: CreateCategoryDto) {
     return this.categoriesService.create(payload);
   }
@@ -43,5 +48,5 @@ export class CategoriesController {
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.delete(id);
-  }
+  } */
 }

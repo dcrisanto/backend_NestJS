@@ -1,58 +1,58 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import {
   CreateCategoryDto,
   UpdateCategoryDto,
 } from 'src/products/dtos/categories.dto';
 import { Category } from 'src/products/entities/category.entity';
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class CategoriesService {
-  private counterId = 1;
-  private categories: Category[] = [
-    {
-      id: 1,
-      name: 'category1',
-      productsId: [1, 3, 5, 7],
-    },
-  ];
+  constructor(
+    @InjectModel(Category.name) private categoryModel: Model<Category>,
+    @InjectModel(Product.name) private productModel: Model<Product>,
+  ) {}
 
   findAllCategory() {
-    const getNameCategories = () => {
-      const nameCategories = this.categories.map((element) => element.name);
-      return nameCategories;
-    };
-    return getNameCategories();
+    return this.categoryModel.find().exec();
   }
 
-  findOne(id: number) {
-    const category = this.categories.find((element) => element.id === id);
+  async findOne(id: string) {
+    const category = await this.categoryModel.findById(id).exec();
     if (!category) {
       throw new NotFoundException(`La categoría con el id ${id} no existe`);
     }
     return category;
   }
 
-  findProductCategory(id: number, productId: number) {
-    const category = this.categories.find((element) => element.id === id);
+  async findProductCategory(id: string, productId: string) {
+    const category = await this.categoryModel.findById(id).exec();
     if (!category) {
       throw new NotFoundException(`La categoría con el id ${id} no existe`);
     }
-    const product = category.productsId.find(
-      (element) => element === productId,
-    );
+    const idProduct = category.products.find((item) => item === productId);
+    if (!idProduct) {
+      throw new NotFoundException(
+        `El producto con el id ${productId} no existe`,
+      );
+    }
+    const product = await this.productModel.findById(productId).exec();
     if (!product) {
       throw new NotFoundException(
-        `El producto con el id ${productId} no existe en la categoría ${category.name}`,
+        `El producto con el id ${productId} no está disponible para la categoría ${category.name}`,
       );
     }
     return {
-      id: category.id,
-      name: category.name,
-      productId: productId,
+      id,
+      category: category.name,
+      product,
     };
   }
 
-  create(payload: CreateCategoryDto) {
+  /*   create(payload: CreateCategoryDto) {
     this.counterId++;
     const newCategory = {
       id: this.counterId,
@@ -82,5 +82,5 @@ export class CategoriesService {
     }
     this.categories.splice(index, 1);
     return `La categoría con el id ${id} fue eliminado satisfactoriamente`;
-  }
+  } */
 }

@@ -10,20 +10,6 @@ import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class ProductsService {
-  //persistencia en memoria
-  /* private counterId = 1;
-  private products: Product[] = [
-    {
-      id: 1,
-      name: 'Product1',
-      category: 'category1',
-      description: 'description product',
-      price: 260,
-      stock: 12,
-      image: '',
-    },
-  ]; */
-
   //persistencia en db
   constructor(
     @InjectModel(Product.name) private productModel: Model<Product>,

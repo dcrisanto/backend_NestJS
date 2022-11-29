@@ -1,34 +1,32 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import {
   CreateCustomerDto,
   UpdateCustomerDto,
 } from 'src/users/dtos/customers.dto';
+import { Customer } from '../entities/customer.entity';
 
 @Injectable()
 export class CustomersService {
-  private counterId = 1;
-  private customers = [
-    {
-      id: 1,
-      name: 'Rosario',
-      email: 'rosario.perez@gmail.com',
-      user: 'rperez',
-    },
-  ];
+  constructor(
+    @InjectModel(Customer.name) private customerModel: Model<Customer>,
+  ) {}
 
   findAll() {
-    return this.customers;
+    return this.customerModel.find().exec();
   }
 
-  findOne(id: number) {
-    const customer = this.customers.find((element) => element.id === id);
+  async findOne(id: string) {
+    const customer = await this.customerModel.findById(id).exec();
     if (!customer) {
       throw new NotFoundException(`No existe el cliente con el id ${id}`);
     }
     return customer;
   }
 
-  create(payload: CreateCustomerDto) {
+  /* create(payload: CreateCustomerDto) {
     this.counterId++;
     const customer = {
       id: this.counterId,
@@ -58,5 +56,5 @@ export class CustomersService {
     }
     this.customers.splice(index, 1);
     return `El cliente con el id ${id} fue eliminado satisfactoriamente`;
-  }
+  } */
 }
