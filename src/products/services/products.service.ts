@@ -1,4 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import {
   CreateProductDto,
   UpdateProductDto,
@@ -7,7 +10,8 @@ import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class ProductsService {
-  private counterId = 1;
+  //persistencia en memoria
+  /* private counterId = 1;
   private products: Product[] = [
     {
       id: 1,
@@ -18,14 +22,21 @@ export class ProductsService {
       stock: 12,
       image: '',
     },
-  ];
+  ]; */
+
+  //persistencia en db
+  constructor(
+    @InjectModel(Product.name) private productModel: Model<Product>,
+  ) {}
 
   findAll() {
-    return this.products;
+    return this.productModel.find().exec();
   }
 
-  findOne(id: number) {
-    const product = this.products.find((element) => element.id === id);
+  async findOne(id: string) {
+    //const product = this.products.find((element) => element.id === id);
+    //es una promesa por lo que el método debe ser asíncrono y devolver un await
+    const product = await this.productModel.findById(id).exec();
     if (!product) {
       //manipulando los errores propios de nestJS
       throw new NotFoundException(`El producto con el id ${id} no existe`);
@@ -33,7 +44,7 @@ export class ProductsService {
     return product;
   }
 
-  create(payload: CreateProductDto) {
+  /* create(payload: CreateProductDto) {
     console.log(payload);
     this.counterId++;
     const newProduct = {
@@ -76,5 +87,5 @@ export class ProductsService {
     }
     this.products.splice(index, 1);
     return `El producto con id ${id} fue eliminado satisfactoriamente`;
-  }
+  } */
 }

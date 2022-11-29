@@ -10,7 +10,8 @@ export class BrandsService {
     {
       id: 1,
       name: 'Renzo Costa',
-      products: [
+      products: [],
+      /* products: [
         {
           id: 1,
           name: 'cartera',
@@ -20,7 +21,7 @@ export class BrandsService {
           stock: 50,
           image: '',
         },
-      ],
+      ], */
     },
   ];
 
