@@ -26,35 +26,26 @@ export class CustomersService {
     return customer;
   }
 
-  /* create(payload: CreateCustomerDto) {
-    this.counterId++;
-    const customer = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.customers.push(customer);
+  create(data: CreateCustomerDto) {
+    const newCustomer = new this.customerModel(data);
+    return newCustomer.save();
+  }
+
+  async update(id: string, changes: UpdateCustomerDto) {
+    const customer = await this.customerModel
+      .findByIdAndUpdate(id, { $set: changes }, { $new: true })
+      .exec();
+    if (!customer) {
+      throw new NotFoundException(`El cliente con el id ${id} no existe`);
+    }
     return customer;
   }
 
-  update(id: number, payload: UpdateCustomerDto) {
-    const customer = this.findOne(id);
-    const index = this.customers.findIndex((item) => item.id === id);
-    if (index == -1) {
+  async delete(id: string) {
+    const customer = await this.customerModel.findByIdAndDelete(id).exec();
+    if (!customer) {
       throw new NotFoundException(`El cliente con el id ${id} no existe`);
     }
-    this.customers[index] = {
-      ...customer,
-      ...payload,
-    };
-    return this.customers[index];
-  }
-
-  delete(id: number) {
-    const index = this.customers.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`El cliente con el id ${id} no existe`);
-    }
-    this.customers.splice(index, 1);
     return `El cliente con el id ${id} fue eliminado satisfactoriamente`;
-  } */
+  }
 }

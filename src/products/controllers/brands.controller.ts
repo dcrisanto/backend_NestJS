@@ -9,6 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
 
 import { CreateBrandDto, UpdateBrandDto } from 'src/products/dtos/brands.dto';
 import { BrandsService } from '../services/brands.service';
@@ -24,33 +25,33 @@ export class BrandsController {
   }
 
   @Get(':id')
-  getBrand(@Param('id') id: string) {
+  getBrand(@Param('id', MongoIdPipe) id: string) {
     return this.brandsService.findOne(id);
   }
 
   @Get(':id/product/:productId')
-  getBrandsProduct(
-    @Param('id') id: string,
+  getBrandProduct(
+    @Param('id', MongoIdPipe) id: string,
     @Param('productId') productId: string,
   ) {
     return this.brandsService.findBrandProduct(id, productId);
   }
 
-  /* @Post()
+  @Post()
   create(@Body() payload: CreateBrandDto) {
     return this.brandsService.create(payload);
   }
 
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', MongoIdPipe) id: string,
     @Body() payload: UpdateBrandDto,
   ) {
     return this.brandsService.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id', MongoIdPipe) id: string) {
     return this.brandsService.delete(id);
-  } */
+  }
 }

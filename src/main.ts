@@ -14,6 +14,10 @@ async function bootstrap() {
       whitelist: true,
       //para alertarlo que se está enviando una propiedad que no está definida
       forbidNonWhitelisted: true,
+      //lo que venga por query params lo transforme explicitamente
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 

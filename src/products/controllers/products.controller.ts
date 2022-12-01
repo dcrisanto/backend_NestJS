@@ -17,7 +17,12 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { ProductsService } from 'src/products/services/products.service';
 import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
-import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
+import {
+  CreateProductDto,
+  FilterProductsDto,
+  UpdateProductDto,
+} from '../dtos/products.dto';
+import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
 
 //colocar en grupo las api: ApiTags
 @ApiTags('products')
@@ -25,31 +30,26 @@ import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
   @Get()
-  getProducts(
-    @Query('limit') limit = 100,
-    @Query('offset') offset = 0,
-    //@Query('brand') brand: string,
-  ) {
-    /* return {
-      message: `products: limit=> ${limit} offset=> ${offset} brand=> ${brand}`,
-    }; */
-    return this.productsService.findAll();
+  getProducts(@Query() params: FilterProductsDto) {
+    return this.productsService.findAll(params);
   }
 
   @Get(':id')
   //personalizando el code status
   @HttpCode(HttpStatus.ACCEPTED)
   //style express
-  getProductId(/* @Res() response: Response,  */ @Param('id') id: string) {
+  getProductId(
+    /* @Res() response: Response,  */ @Param('id', MongoIdPipe) id: string,
+  ) {
     /* response.status(200).send({
       message: `productId ${id}`,
     }); */
     return this.productsService.findOne(id);
   }
 
-  /*   @Get('filter/:name')
-  getProductFilter(@Param('name') name: string) {
-    return this.productsService.search(name);
+  @Get('filter/:search')
+  getProductFilter(@Param('search') search: string) {
+    return this.productsService.search(search);
   }
 
   @Post()
@@ -59,14 +59,14 @@ export class ProductsController {
 
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', MongoIdPipe) id: string,
     @Body() payload: UpdateProductDto,
   ) {
     return this.productsService.update(id, payload);
   }
-
+  nestjs;
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id', MongoIdPipe) id: string) {
     return this.productsService.delete(id);
-  } */
+  }
 }

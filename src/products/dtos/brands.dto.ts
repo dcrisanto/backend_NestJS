@@ -9,10 +9,7 @@ export class CreateBrandDto {
 
   @IsArray()
   @IsNotEmpty()
-  readonly products: Product[];
+  readonly products: Array<string>;
 }
 
-export class UpdateBrandDto extends PartialType(CreateBrandDto) {
-  /* readonly name?: string;
-  readonly products: Array<Product>; */
-}
+export class UpdateBrandDto extends PartialType(CreateBrandDto) {}

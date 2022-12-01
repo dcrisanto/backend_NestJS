@@ -4,6 +4,8 @@ import {
   IsUrl,
   IsNotEmpty,
   IsPositive,
+  IsOptional,
+  Min,
 } from 'class-validator';
 //import { PartialType } from '@nestjs/mapped-types';
 //Para documentar los dto se debe coger el PartialType del paquete de swagger
@@ -19,10 +21,6 @@ export class CreateProductDto {
   @IsNotEmpty()
   @ApiProperty({ description: 'the name of product' })
   readonly name: string;
-
-  @IsString()
-  @IsNotEmpty()
-  readonly category: string;
 
   @IsString()
   @IsNotEmpty()
@@ -44,11 +42,14 @@ export class CreateProductDto {
 }
 
 //Va a utilizar las mismas validaciones que CreateProductDto pero serán opcionales
-export class UpdateProductDto extends PartialType(CreateProductDto) {
-  // atriutos a actualizar opcionales
-  /* readonly name?: string;
-  readonly description?: string;
-  readonly price?: number;
-  readonly stock?: number;
-  readonly image?: string; */
+export class UpdateProductDto extends PartialType(CreateProductDto) {}
+
+export class FilterProductsDto {
+  @IsOptional()
+  @IsPositive()
+  limit: number;
+
+  @IsOptional()
+  @Min(0)
+  offset: number;
 }

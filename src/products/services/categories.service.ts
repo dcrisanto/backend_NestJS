@@ -52,35 +52,26 @@ export class CategoriesService {
     };
   }
 
-  /*   create(payload: CreateCategoryDto) {
-    this.counterId++;
-    const newCategory = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.categories.push(newCategory);
-    return newCategory;
+  create(data: CreateCategoryDto) {
+    const newCategory = new this.categoryModel(data);
+    return newCategory.save();
   }
 
-  update(id: number, payload: UpdateCategoryDto) {
-    const category = this.findOne(id);
-    const index = this.categories.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`La categoría con el id ${id} no existe`);
+  async update(id: string, changes: UpdateCategoryDto) {
+    const category = await this.categoryModel
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
+      .exec();
+    if (!category) {
+      throw new NotFoundException(`No existe la categoría con el id ${id}`);
     }
-    this.categories[index] = {
-      ...category,
-      ...payload,
-    };
-    return this.categories[index];
+    return category;
   }
 
-  delete(id: number) {
-    const index = this.categories.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`La categoría con el id ${id} no existe`);
+  async delete(id: string) {
+    const category = await this.categoryModel.findByIdAndRemove(id).exec();
+    if (!category) {
+      throw new NotFoundException(`No existe la categoría con el id ${id}`);
     }
-    this.categories.splice(index, 1);
     return `La categoría con el id ${id} fue eliminado satisfactoriamente`;
-  } */
+  }
 }

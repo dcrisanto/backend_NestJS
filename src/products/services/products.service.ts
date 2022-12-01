@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 
 import {
   CreateProductDto,
+  FilterProductsDto,
   UpdateProductDto,
 } from 'src/products/dtos/products.dto';
 import { Product } from '../entities/product.entity';
@@ -15,12 +16,15 @@ export class ProductsService {
     @InjectModel(Product.name) private productModel: Model<Product>,
   ) {}
 
-  findAll() {
+  findAll(params?: FilterProductsDto) {
+    if (params) {
+      const { limit, offset } = params;
+      return this.productModel.find().skip(offset).limit(limit).exec();
+    }
     return this.productModel.find().exec();
   }
 
   async findOne(id: string) {
-    //const product = this.products.find((element) => element.id === id);
     //es una promesa por lo que el método debe ser asíncrono y devolver un await
     const product = await this.productModel.findById(id).exec();
     if (!product) {
@@ -30,48 +34,37 @@ export class ProductsService {
     return product;
   }
 
-  /* create(payload: CreateProductDto) {
-    console.log(payload);
-    this.counterId++;
-    const newProduct = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.products.push(newProduct);
-    return newProduct;
+  create(data: CreateProductDto) {
+    //creando una instancia del model productModel
+    const newProduct = new this.productModel(data);
+    //devuelve un modelo y lo salvamos
+    return newProduct.save();
   }
 
-  search(name: string) {
-    const includeSearch = this.products.filter(
-      (element) => element.name === name,
-    );
-    if (includeSearch.length == 0) {
-      throw new NotFoundException(
-        `No existen coincidencias con el nombre ${name}`,
-      );
-    }
-    return includeSearch;
+  async search(searchInput: string) {
+    const products = this.productModel
+      .find({ $text: { $search: searchInput } })
+      .exec();
+    return products;
   }
 
-  update(id: number, payload: UpdateProductDto) {
-    const product = this.findOne(id);
-    const index = this.products.findIndex((item) => item.id === id);
-    if (index == -1) {
+  async update(id: string, changes: UpdateProductDto) {
+    //con set indica que sólo modiique esos atributos y los una al modelo que está consultando, pero no cambia todo el modelo como tal
+    //con new:true indico que queremos que nos envíe el producto actualizado
+    const product = await this.productModel
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
+      .exec();
+    if (!product) {
       throw new NotFoundException(`El producto con el id ${id} no existe`);
     }
-    this.products[index] = {
-      ...product,
-      ...payload,
-    };
-    return this.products[index];
+    return product;
   }
 
-  delete(id: number) {
-    const index = this.products.findIndex((item) => item.id === id);
-    if (index == -1) {
+  async delete(id: string) {
+    const product = await this.productModel.findByIdAndDelete(id).exec();
+    if (!product) {
       throw new NotFoundException(`El producto con el id ${id} no existe`);
     }
-    this.products.splice(index, 1);
-    return `El producto con id ${id} fue eliminado satisfactoriamente`;
-  } */
+    return `El producto con el id ${id} fue eliminado satisfactoriamente`;
+  }
 }

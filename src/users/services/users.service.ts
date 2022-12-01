@@ -50,44 +50,35 @@ export class UsersService {
     };
   }
 
-  /* create(payload: CreateUserDto) {
-    this.counterId++;
-    const newUser = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.users.push(newUser);
-    return newUser;
+  create(data: CreateUserDto) {
+    const newUser = new this.userModel(data);
+    return newUser.save();
   }
 
-  update(id: number, payload: UpdateUserDto) {
-    const user = this.findUser(id);
-    const index = this.users.findIndex((item) => item.id === id);
-    if (index == -1) {
+  async update(id: string, changes: UpdateUserDto) {
+    const user = await this.userModel
+      .findByIdAndUpdate(id, { $set: changes }, { $new: true })
+      .exec();
+    if (!user) {
       throw new NotFoundException(`El usuario con el id ${id} no existe`);
     }
-    this.users[index] = {
-      ...user,
-      ...payload,
-    };
-    return this.users[index];
+    return user;
   }
 
-  delete(id: number) {
-    const index = this.users.findIndex((item) => item.id === id);
-    if (index == -1) {
+  async delete(id: string) {
+    const user = await this.userModel.findByIdAndDelete(id).exec();
+    if (!user) {
       throw new NotFoundException(`El usuario con el id ${id} no existe`);
     }
-    this.users.splice(index, 1);
     return `El usuario con el id ${id} fue eliminado satisfactoriamente`;
   }
 
-  getTasks(id: number) {
-    const index = this.users.findIndex((item) => item.id === id);
-    if (index == -1) {
+  getTasks(id: string) {
+    const user = this.userModel.findById(id).exec();
+    if (!user) {
       throw new NotFoundException(`El usuario con el id ${id} no existe`);
     }
     const tasksCollection = this.database.collection('tasks');
     return tasksCollection.find().toArray();
-  } */
+  }
 }

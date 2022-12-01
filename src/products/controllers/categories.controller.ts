@@ -1,6 +1,7 @@
 import { Body, Delete, Get, Post, Put } from '@nestjs/common';
 import { Controller, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
 
 import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
 import {
@@ -19,34 +20,34 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  getCategory(@Param('id') id: string) {
+  getCategory(@Param('id', MongoIdPipe) id: string) {
     return this.categoriesService.findOne(id);
   }
 
   @Get(':id/products/:productId')
   // se llama los parámetros dentro del atributo del método
   getProductCategory(
-    @Param('id') id: string,
-    @Param('productId') productId: string,
+    @Param('id', MongoIdPipe) id: string,
+    @Param('productId', MongoIdPipe) productId: string,
   ) {
     return this.categoriesService.findProductCategory(id, productId);
   }
 
-  /*  @Post()
+  @Post()
   create(@Body() payload: CreateCategoryDto) {
     return this.categoriesService.create(payload);
   }
 
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', MongoIdPipe) id: string,
     @Body() payload: UpdateCategoryDto,
   ) {
     return this.categoriesService.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id') id: string) {
     return this.categoriesService.delete(id);
-  } */
+  }
 }

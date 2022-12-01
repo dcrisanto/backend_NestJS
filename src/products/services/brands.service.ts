@@ -49,49 +49,26 @@ export class BrandsService {
     };
   }
 
-  /* create(payload: CreateBrandDto) {
-    this.counterId++;
-    if (!payload.products) {
-      const newBrand = {
-        id: this.counterId,
-        ...payload,
-      };
-    }
-    const listProducts = payload.products;
-    const addProductsIds = listProducts.map((item) =>
-      Object.defineProperty(item, 'id', {
-        value: this.counterProductId++,
-        enumerable: true,
-      }),
-    );
-    const newBrand = {
-      id: this.counterId,
-      name: payload.name,
-      products: addProductsIds,
-    };
-    this.brands.push(newBrand);
-    return newBrand;
+  create(data: CreateBrandDto) {
+    const newBrand = new this.brandModel(data);
+    return newBrand.save();
   }
 
-  update(id: number, payload: UpdateBrandDto) {
-    const brand = this.brands.find((item) => item.id === id);
-    const index = this.brands.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`La marca con el id ${id} no existe`);
+  async update(id: string, changes: UpdateBrandDto) {
+    const brand = await this.brandModel
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
+      .exec();
+    if (!brand) {
+      throw new NotFoundException(`No existe la categoría con el id ${id}`);
     }
-    this.brands[index] = {
-      ...brand,
-      ...payload,
-    };
-    return this.brands[index];
+    return brand;
   }
 
-  delete(id: number) {
-    const index = this.brands.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`No existe la marca con el id ${id}`);
+  async delete(id: string) {
+    const brand = await this.brandModel.findByIdAndRemove(id).exec();
+    if (!brand) {
+      throw new NotFoundException(`No existe la categoría con el id ${id}`);
     }
-    this.brands.splice(index, 1);
     return `La marca con el id ${id} fue eliminado satisfactoriamente`;
-  } */
+  }
 }
