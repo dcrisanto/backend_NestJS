@@ -10,7 +10,8 @@ export class Product extends Document {
   @Prop({ required: true })
   description: string;
 
-  @Prop({ type: Number, required: true })
+  //price este indexado para que cuando se realice la búsqueda sea de manera rápida
+  @Prop({ type: Number, required: true, index: true })
   price: number;
 
   @Prop({ type: Number, required: true })
@@ -21,3 +22,5 @@ export class Product extends Document {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+//Para realizar una indexacción compuesta, el 1 indica de que forma la va a ordenar, stock indexado en forma descendente
+ProductSchema.index({ price: 1, stock: -1 });
