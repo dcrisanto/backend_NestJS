@@ -1,4 +1,5 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+//raw: para manejar las relaciones embebidas
+import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
@@ -19,6 +20,16 @@ export class Product extends Document {
 
   @Prop()
   image: string;
+
+  //raw: indicando que tiene un sub objecto
+  @Prop(
+    raw({
+      name: { type: String },
+      image: { type: String },
+    }),
+  )
+  //una forma de resolver la realción
+  category: Record<string, any>;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

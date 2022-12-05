@@ -7,11 +7,13 @@ import {
   IsOptional,
   Min,
   ValidateIf,
+  ValidateNested, //validar en cascada
 } from 'class-validator';
 //import { PartialType } from '@nestjs/mapped-types';
 //Para documentar los dto se debe coger el PartialType del paquete de swagger
 //ApiProperty: decorador que permite colocar más información de qué espero del atributo
 import { PartialType, ApiProperty } from '@nestjs/swagger';
+import { CreateCategoryDto } from './categories.dto';
 
 export class CreateProductDto {
   //propiedades que no pueden ser modificadas con readonly en tiempo de desarrollo, por ejemplo cuando lo deseamos cambiar en services una de estas propiedades no lo permitirá
@@ -40,6 +42,10 @@ export class CreateProductDto {
   @IsUrl()
   @IsNotEmpty()
   readonly image: string;
+
+  @IsNotEmpty()
+  @ValidateNested() //Para que estén las validaciones de otro dto
+  readonly category: CreateCategoryDto;
 }
 
 //Va a utilizar las mismas validaciones que CreateProductDto pero serán opcionales

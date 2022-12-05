@@ -1,14 +1,14 @@
 import { PartialType } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
 
-  @IsArray()
+  @IsUrl()
   @IsNotEmpty()
-  readonly products: Array<string>;
+  readonly image: string;
 }
 
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}

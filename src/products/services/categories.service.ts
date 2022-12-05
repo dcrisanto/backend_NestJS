@@ -33,21 +33,14 @@ export class CategoriesService {
     if (!category) {
       throw new NotFoundException(`La categoría con el id ${id} no existe`);
     }
-    const idProduct = category.products.find((item) => item === productId);
-    if (!idProduct) {
+    const product = this.productModel.findById(productId).exec();
+    if (!product) {
       throw new NotFoundException(
         `El producto con el id ${productId} no existe`,
       );
     }
-    const product = await this.productModel.findById(productId).exec();
-    if (!product) {
-      throw new NotFoundException(
-        `El producto con el id ${productId} no está disponible para la categoría ${category.name}`,
-      );
-    }
     return {
-      id,
-      category: category.name,
+      category,
       product,
     };
   }

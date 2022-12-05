@@ -7,7 +7,7 @@ export class Category extends Document {
   name: string;
 
   @Prop({ required: true })
-  products: Array<string>;
+  image: string;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
