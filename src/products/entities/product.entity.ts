@@ -1,6 +1,7 @@
 //raw: para manejar las relaciones embebidas
 import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Brand } from './brand.entity';
 
 @Schema()
 export class Product extends Document {
@@ -30,6 +31,11 @@ export class Product extends Document {
   )
   //una forma de resolver la realción
   category: Record<string, any>;
+
+  //En la DB guardará el id y referido a Brandn.name
+  @Prop({ type: Types.ObjectId, ref: Brand.name })
+  //el type puede ser el obcjeto o string con el id
+  brand: Brand | Types.ObjectId;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

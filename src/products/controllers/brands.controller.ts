@@ -29,14 +29,6 @@ export class BrandsController {
     return this.brandsService.findOne(id);
   }
 
-  @Get(':id/product/:productId')
-  getBrandProduct(
-    @Param('id', MongoIdPipe) id: string,
-    @Param('productId') productId: string,
-  ) {
-    return this.brandsService.findBrandProduct(id, productId);
-  }
-
   @Post()
   create(@Body() payload: CreateBrandDto) {
     return this.brandsService.create(payload);

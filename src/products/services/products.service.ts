@@ -24,9 +24,15 @@ export class ProductsService {
         //gte: mayor-igual, lte: menor-igual
         filter.price = { $gte: minPrice, $lte: maxPrice };
       }
-      return this.productModel.find(filter).skip(offset).limit(limit).exec();
+      return this.productModel
+        .find(filter)
+        .populate('brand')
+        .skip(offset)
+        .limit(limit)
+        .exec();
     }
-    return this.productModel.find().exec();
+    //populate: indicar que tengo una referencia y quiero que la resuelva
+    return this.productModel.find().populate('brand').exec();
   }
 
   async findOne(id: string) {

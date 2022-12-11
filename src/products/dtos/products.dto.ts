@@ -7,7 +7,8 @@ import {
   IsOptional,
   Min,
   ValidateIf,
-  ValidateNested, //validar en cascada
+  ValidateNested,
+  IsMongoId, //validar en cascada
 } from 'class-validator';
 //import { PartialType } from '@nestjs/mapped-types';
 //Para documentar los dto se debe coger el PartialType del paquete de swagger
@@ -46,6 +47,10 @@ export class CreateProductDto {
   @IsNotEmpty()
   @ValidateNested() //Para que estén las validaciones de otro dto
   readonly category: CreateCategoryDto;
+
+  @IsNotEmpty()
+  @IsMongoId()
+  readonly brand: string;
 }
 
 //Va a utilizar las mismas validaciones que CreateProductDto pero serán opcionales

@@ -3,11 +3,12 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class Brand extends Document {
-  @Prop({ required: true })
+  //unique: la propiedad name asignada no se podrá repetir
+  @Prop({ required: true, unique: true })
   name: string;
 
   @Prop({ required: true })
-  products: Array<string>;
+  image: string;
 }
 
 export const BrandSchema = SchemaFactory.createForClass(Brand);

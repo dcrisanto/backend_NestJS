@@ -7,10 +7,13 @@ export class Customer extends Document {
   name: string;
 
   @Prop({ required: true })
+  lastName: string;
+
+  @Prop({ required: true })
   email: string;
 
   @Prop({ required: true })
-  user: string;
+  phone: number;
 }
 
 export const CustomerSchema = SchemaFactory.createForClass(Customer);

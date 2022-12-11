@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCustomerDto {
@@ -8,11 +8,15 @@ export class CreateCustomerDto {
 
   @IsString()
   @IsNotEmpty()
+  readonly lastName: string;
+
+  @IsString()
+  @IsNotEmpty()
   readonly email: string;
 
   @IsString()
   @IsNotEmpty()
-  readonly user: string;
+  readonly phone: number;
 }
 
 export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {}

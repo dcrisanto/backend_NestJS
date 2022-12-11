@@ -16,7 +16,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  readonly position: string;
+  readonly role: string;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {

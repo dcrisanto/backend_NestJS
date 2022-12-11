@@ -25,30 +25,6 @@ export class BrandsService {
     return brand;
   }
 
-  async findBrandProduct(id: string, productId: string) {
-    const brand = await this.brandModel.findById(id).exec();
-    if (!brand) {
-      throw new NotFoundException(`No existe la marca con el id ${id}`);
-    }
-    const idProduct = brand.products.find((item) => item === productId);
-    if (!idProduct) {
-      throw new NotFoundException(
-        `El producto con el id ${productId} no existe`,
-      );
-    }
-    const product = await this.productModel.findById(productId).exec();
-    if (!product) {
-      throw new NotFoundException(
-        `El producto con el id ${productId} no está disponible para la marca ${brand.name}`,
-      );
-    }
-    return {
-      id,
-      name: brand.name,
-      product,
-    };
-  }
-
   create(data: CreateBrandDto) {
     const newBrand = new this.brandModel(data);
     return newBrand.save();
@@ -65,7 +41,7 @@ export class BrandsService {
   }
 
   async delete(id: string) {
-    const brand = await this.brandModel.findByIdAndRemove(id).exec();
+    const brand = await this.brandModel.findByIdAndDelete(id).exec();
     if (!brand) {
       throw new NotFoundException(`No existe la categoría con el id ${id}`);
     }
