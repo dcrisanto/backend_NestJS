@@ -22,6 +22,7 @@ export class Product extends Document {
   @Prop()
   image: string;
 
+  //relación uno a uno - embebidas
   //raw: indicando que tiene un sub objecto
   @Prop(
     raw({
@@ -32,6 +33,7 @@ export class Product extends Document {
   //una forma de resolver la realción
   category: Record<string, any>;
 
+  //relación uni a uno - referenciada
   //En la DB guardará el id y referido a Brandn.name
   @Prop({ type: Types.ObjectId, ref: Brand.name })
   //el type puede ser el obcjeto o string con el id
