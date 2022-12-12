@@ -4,10 +4,10 @@ import {
   IsArray,
   IsNotEmpty,
   IsNumber,
-  IsPhoneNumber,
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { CreateCreateEmbeddedDocumentRelationOneNDto } from './embedded-document-relation-one-n.dto';
 
 export class Skills {
   @IsString()
@@ -41,6 +41,12 @@ export class CreateCustomerDto {
   @ValidateNested()
   @Type(() => Skills)
   readonly skills: Skills[];
+
+  @IsNotEmpty()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateCreateEmbeddedDocumentRelationOneNDto)
+  readonly embeddedDocumentRelationOneN: CreateCreateEmbeddedDocumentRelationOneNDto[];
 }
 
 export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {}

@@ -15,6 +15,7 @@ import {
 //ApiProperty: decorador que permite colocar más información de qué espero del atributo
 import { PartialType, ApiProperty } from '@nestjs/swagger';
 import { CreateCategoryDto } from './categories.dto';
+import { CreateEmbeddedDocumentRelationOneOneDto } from './embedded-document-relation-one-one.dto';
 
 export class CreateProductDto {
   //propiedades que no pueden ser modificadas con readonly en tiempo de desarrollo, por ejemplo cuando lo deseamos cambiar en services una de estas propiedades no lo permitirá
@@ -51,6 +52,11 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsMongoId()
   readonly brand: string;
+
+  //al tener el objeto embebido con tipado, lo puedes incluir en tus DTOS para una validación más poderosa:
+  @IsNotEmpty()
+  @ValidateNested()
+  readonly embeddedDocumentRelationOneOne: CreateEmbeddedDocumentRelationOneOneDto;
 }
 
 //Va a utilizar las mismas validaciones que CreateProductDto pero serán opcionales

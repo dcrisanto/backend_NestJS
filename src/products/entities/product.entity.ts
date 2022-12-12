@@ -2,6 +2,10 @@
 import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Brand } from './brand.entity';
+import {
+  EmbeddedDocumentRelationOneOne,
+  EmbeddedDocumentRelationOneOneSchema,
+} from './embedded-document-relation-one-one.entity';
 
 @Schema()
 export class Product extends Document {
@@ -32,6 +36,10 @@ export class Product extends Document {
   )
   //una forma de resolver la realción
   category: Record<string, any>;
+
+  //Usando tipado para los documentos embebidos
+  @Prop({ type: EmbeddedDocumentRelationOneOneSchema })
+  embeddedDocumentRelationOneOne: EmbeddedDocumentRelationOneOne;
 
   //relación uni a uno - referenciada
   //En la DB guardará el id y referido a Brandn.name
