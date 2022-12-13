@@ -5,10 +5,12 @@ import { ProductsModule } from 'src/products/products.module';
 import { CustomersService } from 'src/users/services/customers.service';
 import { UsersService } from 'src/users/services/users.service';
 import { CustomersController } from './controllers/customers.controller';
+import { OrdersController } from './controllers/orders.controller';
 import { UsersController } from './controllers/users.controller';
 import { Customer, CustomerSchema } from './entities/customer.entity';
 import { Order, OrderSchema } from './entities/order.entity';
 import { User, UserSchema } from './entities/user.entity';
+import { OrdersService } from './services/orders.service';
 
 @Module({
   //importamos ProductsModule para poder usar ProductsService en UsersServices
@@ -29,7 +31,7 @@ import { User, UserSchema } from './entities/user.entity';
       },
     ]),
   ],
-  controllers: [UsersController, CustomersController],
-  providers: [UsersService, CustomersService],
+  controllers: [UsersController, CustomersController, OrdersController],
+  providers: [UsersService, CustomersService, OrdersService],
 })
 export class UsersModule {}

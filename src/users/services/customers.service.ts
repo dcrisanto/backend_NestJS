@@ -33,7 +33,7 @@ export class CustomersService {
 
   async update(id: string, changes: UpdateCustomerDto) {
     const customer = await this.customerModel
-      .findByIdAndUpdate(id, { $set: changes }, { $new: true })
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
       .exec();
     if (!customer) {
       throw new NotFoundException(`El cliente con el id ${id} no existe`);

@@ -57,7 +57,7 @@ export class UsersService {
 
   async update(id: string, changes: UpdateUserDto) {
     const user = await this.userModel
-      .findByIdAndUpdate(id, { $set: changes }, { $new: true })
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
       .exec();
     if (!user) {
       throw new NotFoundException(`El usuario con el id ${id} no existe`);
