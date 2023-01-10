@@ -41,7 +41,7 @@ export class Product extends Document {
   @Prop({ type: EmbeddedDocumentRelationOneOneSchema })
   embeddedDocumentRelationOneOne: EmbeddedDocumentRelationOneOne;
 
-  //relación uni a uno - referenciada
+  //relación uno a uno - referenciada
   //En la DB guardará el id y referido a Brandn.name
   @Prop({ type: Types.ObjectId, ref: Brand.name })
   //el type puede ser el obcjeto o string con el id

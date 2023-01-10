@@ -46,4 +46,22 @@ export class OrdersService {
     }
     return `El usuario con el id ${id} fue eliminado satisfactoriamente`;
   }
+
+  async removeProduct(id: string, productId: string) {
+    const order = await this.orderModel.findById(id);
+    if (!order) {
+      throw new NotFoundException(`La orden con el id ${id} no existe`);
+    }
+    order.products.pull(productId);
+    return order.save();
+  }
+
+  async addProducts(id: string, productIds: string[]) {
+    const order = await this.orderModel.findById(id);
+    if (!order) {
+      throw new NotFoundException(`La order con el id ${id} no existe`);
+    }
+    productIds.forEach((prodId) => order.products.push(prodId));
+    return order.save();
+  }
 }
