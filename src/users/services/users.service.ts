@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Order } from '../entities/order.entity';
 //como se ha exportado como export default no es necesario los {}
 import config from '../../config';
+import { Client } from 'pg';
 
 @Injectable()
 export class UsersService {
@@ -15,6 +16,7 @@ export class UsersService {
     //@Inject('API_KEY') private apiKey: string,
     private configService: ConfigService,
     @Inject(config.KEY) private config_: ConfigType<typeof config>,
+    @Inject('PG') private clientPG: Client,
   ) {}
 
   private counterId = 1;
@@ -27,6 +29,18 @@ export class UsersService {
       position: 'seller',
     },
   ];
+
+  getTasks() {
+    //retornando una Promesa nativa
+    return new Promise((resolve, reject) => {
+      this.clientPG.query('SELECT * FROM tasks', (err, res) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(res.rows);
+      });
+    });
+  }
 
   findAll() {
     //también lo puedes tipar indicando que recibes un string

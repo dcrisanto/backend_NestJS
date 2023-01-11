@@ -1,19 +1,11 @@
 import { Module, Global } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { Client } from 'pg';
+import config from 'src/config';
 
 const API_KEY = '12345';
 const API_KEY_PROD = 'PROD1234';
 
-//creando una instancia de la conexión
-const client = new Client({
-  host: 'localhost',
-  port: 5432,
-  user: 'root',
-  password: '123456',
-  database: 'my_db',
-});
-
-client.connect();
 //error first: envía el error de primera
 /* client.query('SELECT * FROM tasks', (err, res) => {
   if (err) throw err;
@@ -31,7 +23,23 @@ client.connect();
     },
     {
       provide: 'PG',
-      useValue: client,
+      //useValue: client,
+      //Injección de dependencias, variables de entorno
+      useFactory: (ConfigService: ConfigType<typeof config>) => {
+        const { user, password, dbName, host, port } = ConfigService.postgres;
+        //creando una instancia de la conexión
+        const client = new Client({
+          host,
+          port,
+          user,
+          password,
+          database: dbName,
+        });
+
+        client.connect();
+        return client;
+      },
+      inject: [config.KEY],
     },
   ],
   //para utilizar el provider fuera

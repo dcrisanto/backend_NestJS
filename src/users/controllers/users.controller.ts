@@ -18,6 +18,11 @@ import { UsersService } from 'src/users/services/users.service';
 export class UsersController {
   constructor(private userService: UsersService) {}
 
+  @Get('tasks')
+  getTasks() {
+    return this.userService.getTasks();
+  }
+
   @Get()
   getUsers() {
     return this.userService.findAll();
