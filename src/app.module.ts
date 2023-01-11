@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { Client } from 'pg';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,23 +10,6 @@ import { ProductsModule } from './products/products.module';
 import { DatabaseModule } from './database/database.module';
 import { enviroments } from './enviroments';
 import config from './config';
-
-//creando una instancia de la conexión
-const client = new Client({
-  host: 'localhost',
-  port: 5432,
-  user: 'root',
-  password: '123456',
-  database: 'my_db',
-});
-
-client.connect();
-//error first: envía el error de primera
-client.query('SELECT * FROM tasks', (err, res) => {
-  if (err) throw err;
-  console.error(err);
-  console.log(res.rows);
-});
 
 @Module({
   imports: [
