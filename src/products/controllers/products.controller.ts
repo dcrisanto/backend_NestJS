@@ -36,11 +36,6 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
-  /* @Get('filter/:name')
-  getProductFilter(@Param('name') name: string) {
-    return this.productsService.search(name);
-  } */
-
   @Get(':id')
   //personalizando el code status
   @HttpCode(HttpStatus.ACCEPTED)
@@ -54,7 +49,7 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
 
-  /* @Post()
+  @Post()
   create(@Body() payload: CreateProductDto) {
     return this.productsService.create(payload);
   }
@@ -69,6 +64,6 @@ export class ProductsController {
 
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
-    return this.productsService.delete(id);
-  } */
+    return this.productsService.remove(id);
+  }
 }

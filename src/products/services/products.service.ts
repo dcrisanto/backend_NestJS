@@ -17,8 +17,8 @@ export class ProductsService {
     return this.productRepo.find();
   }
 
-  findOne(id: number) {
-    const product = this.productRepo.findOneBy({ id });
+  async findOne(id: number) {
+    const product = await this.productRepo.findOneBy({ id });
     if (!product) {
       //manipulando los errores propios de nestJS
       throw new NotFoundException(`El producto con el id ${id} no existe`);
@@ -26,48 +26,31 @@ export class ProductsService {
     return product;
   }
 
-  /* create(payload: CreateProductDto) {
-    console.log(payload);
-    this.counterId++;
-    const newProduct = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.products.push(newProduct);
-    return newProduct;
+  create(data: CreateProductDto) {
+    /* const newProduct = new Product();
+    newProduct.name = data.name;
+    newProduct.category = data.category;
+    newProduct.description = data.description;
+    newProduct.price = data.price;
+    newProduct.stock = data.stock;
+    newProduct.image = data.image; */
+    //Crea una instancia en base al dto product
+    const newProduct = this.productRepo.create(data);
+    return this.productRepo.save(newProduct);
   }
 
-  search(name: string) {
-    const includeSearch = this.products.filter(
-      (element) => element.name === name,
-    );
-    if (includeSearch.length == 0) {
-      throw new NotFoundException(
-        `No existen coincidencias con el nombre ${name}`,
-      );
-    }
-    return includeSearch;
+  async update(id: number, changes: UpdateProductDto) {
+    const product = await this.productRepo.findOneBy({ id });
+    this.productRepo.merge(product, changes);
+    return this.productRepo.save(product);
   }
 
-  update(id: number, payload: UpdateProductDto) {
-    const product = this.findOne(id);
-    const index = this.products.findIndex((item) => item.id === id);
-    if (index == -1) {
+  async remove(id: number) {
+    const product = await this.productRepo.findOneBy({ id });
+    if (!product) {
       throw new NotFoundException(`El producto con el id ${id} no existe`);
     }
-    this.products[index] = {
-      ...product,
-      ...payload,
-    };
-    return this.products[index];
-  }
-
-  delete(id: number) {
-    const index = this.products.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`El producto con el id ${id} no existe`);
-    }
-    this.products.splice(index, 1);
+    this.productRepo.delete(id);
     return `El producto con id ${id} fue eliminado satisfactoriamente`;
-  } */
+  }
 }
