@@ -1,31 +1,24 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import {
   CreateProductDto,
   UpdateProductDto,
 } from 'src/products/dtos/products.dto';
+import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class ProductsService {
-  private counterId = 1;
-  private products: Product[] = [
-    {
-      id: 1,
-      name: 'Product1',
-      category: 'category1',
-      description: 'description product',
-      price: 260,
-      stock: 12,
-      image: '',
-    },
-  ];
+  constructor(
+    @InjectRepository(Product) private productRepo: Repository<Product>,
+  ) {}
 
   findAll() {
-    return this.products;
+    return this.productRepo.find();
   }
 
   findOne(id: number) {
-    const product = this.products.find((element) => element.id === id);
+    const product = this.productRepo.findOneBy({ id });
     if (!product) {
       //manipulando los errores propios de nestJS
       throw new NotFoundException(`El producto con el id ${id} no existe`);
@@ -33,7 +26,7 @@ export class ProductsService {
     return product;
   }
 
-  create(payload: CreateProductDto) {
+  /* create(payload: CreateProductDto) {
     console.log(payload);
     this.counterId++;
     const newProduct = {
@@ -76,5 +69,5 @@ export class ProductsService {
     }
     this.products.splice(index, 1);
     return `El producto con id ${id} fue eliminado satisfactoriamente`;
-  }
+  } */
 }

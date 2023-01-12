@@ -12,7 +12,7 @@ export class CategoriesService {
     {
       id: 1,
       name: 'category1',
-      productsId: [1, 3, 5, 7],
+      //productsId: [1, 3, 5, 7],
     },
   ];
 
@@ -32,7 +32,7 @@ export class CategoriesService {
     return category;
   }
 
-  findProductCategory(id: number, productId: number) {
+  /* findProductCategory(id: number, productId: number) {
     const category = this.categories.find((element) => element.id === id);
     if (!category) {
       throw new NotFoundException(`La categoría con el id ${id} no existe`);
@@ -50,7 +50,7 @@ export class CategoriesService {
       name: category.name,
       productId: productId,
     };
-  }
+  } */
 
   create(payload: CreateCategoryDto) {
     this.counterId++;

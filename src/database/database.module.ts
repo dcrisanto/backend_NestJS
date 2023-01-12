@@ -2,7 +2,8 @@ import { Module, Global } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Client } from 'pg';
-import config from 'src/config';
+import { Product } from 'src/products/entities/product.entity';
+import config from '../config';
 
 const API_KEY = '12345';
 const API_KEY_PROD = 'PROD1234';
@@ -29,6 +30,8 @@ const API_KEY_PROD = 'PROD1234';
           username: user,
           password,
           database: dbName,
+          synchronize: true,
+          autoLoadEntities: true, //buscar cualquier entidad que se ha definido y la sincroniza
         };
       },
     }),
