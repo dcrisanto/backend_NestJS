@@ -40,16 +40,13 @@ export class ProductsService {
   }
 
   async update(id: number, changes: UpdateProductDto) {
-    const product = await this.productRepo.findOneBy({ id });
+    const product = await this.findOne(id);
     this.productRepo.merge(product, changes);
     return this.productRepo.save(product);
   }
 
   async remove(id: number) {
-    const product = await this.productRepo.findOneBy({ id });
-    if (!product) {
-      throw new NotFoundException(`El producto con el id ${id} no existe`);
-    }
+    const product = await this.findOne(id);
     this.productRepo.delete(id);
     return `El producto con id ${id} fue eliminado satisfactoriamente`;
   }

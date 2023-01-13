@@ -18,14 +18,11 @@ export class CategoriesController {
     return this.categoriesService.findAllCategory();
   }
 
-  /* @Get(':id/products/:productId')
+  @Get(':id')
   // se llama los parámetros dentro del atributo del método
-  getProductCategory(
-    @Param('id', ParseIntPipe) id: number,
-    @Param('productId', ParseIntPipe) productId: number,
-  ) {
-    return this.categoriesService.findProductCategory(id, productId);
-  } */
+  getCategory(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.findOne(id);
+  }
 
   @Post()
   create(@Body() payload: CreateCategoryDto) {

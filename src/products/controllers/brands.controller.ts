@@ -23,12 +23,9 @@ export class BrandsController {
     return this.brandsService.findAll();
   }
 
-  @Get(':id/product/:productId')
-  getBrandsProduct(
-    @Param('id', ParseIntPipe) id: number,
-    @Param('productId', ParseIntPipe) productId: number,
-  ) {
-    return this.brandsService.findOne(id, productId);
+  @Get(':id')
+  getBrand(@Param('id', ParseIntPipe) id: number) {
+    return this.brandsService.findOne(id);
   }
 
   @Post()

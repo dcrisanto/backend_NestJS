@@ -1,86 +1,44 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import {
   CreateCategoryDto,
   UpdateCategoryDto,
 } from 'src/products/dtos/categories.dto';
 import { Category } from 'src/products/entities/category.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CategoriesService {
-  private counterId = 1;
-  private categories: Category[] = [
-    {
-      id: 1,
-      name: 'category1',
-      //productsId: [1, 3, 5, 7],
-    },
-  ];
+  constructor(
+    @InjectRepository(Category) private categoryRepo: Repository<Category>,
+  ) {}
 
   findAllCategory() {
-    const getNameCategories = () => {
-      const nameCategories = this.categories.map((element) => element.name);
-      return nameCategories;
-    };
-    return getNameCategories();
+    return this.categoryRepo.find();
   }
 
-  findOne(id: number) {
-    const category = this.categories.find((element) => element.id === id);
+  async findOne(id: number) {
+    const category = await this.categoryRepo.findOneBy({ id });
     if (!category) {
       throw new NotFoundException(`La categoría con el id ${id} no existe`);
     }
     return category;
   }
 
-  /* findProductCategory(id: number, productId: number) {
-    const category = this.categories.find((element) => element.id === id);
-    if (!category) {
-      throw new NotFoundException(`La categoría con el id ${id} no existe`);
-    }
-    const product = category.productsId.find(
-      (element) => element === productId,
-    );
-    if (!product) {
-      throw new NotFoundException(
-        `El producto con el id ${productId} no existe en la categoría ${category.name}`,
-      );
-    }
-    return {
-      id: category.id,
-      name: category.name,
-      productId: productId,
-    };
-  } */
-
-  create(payload: CreateCategoryDto) {
-    this.counterId++;
-    const newCategory = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.categories.push(newCategory);
-    return newCategory;
+  create(data: CreateCategoryDto) {
+    const newCategory = this.categoryRepo.create(data);
+    return this.categoryRepo.save(newCategory);
   }
 
-  update(id: number, payload: UpdateCategoryDto) {
-    const category = this.findOne(id);
-    const index = this.categories.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`La categoría con el id ${id} no existe`);
-    }
-    this.categories[index] = {
-      ...category,
-      ...payload,
-    };
-    return this.categories[index];
+  async update(id: number, changes: UpdateCategoryDto) {
+    const category = await this.findOne(id);
+    this.categoryRepo.merge(category, changes);
+    return this.categoryRepo.save(category);
   }
 
-  delete(id: number) {
-    const index = this.categories.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`La categoría con el id ${id} no existe`);
-    }
-    this.categories.splice(index, 1);
+  async delete(id: number) {
+    const category = await this.findOne(id);
+    this.categoryRepo.delete(id);
     return `La categoría con el id ${id} fue eliminado satisfactoriamente`;
   }
 }
