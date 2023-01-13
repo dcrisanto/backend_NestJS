@@ -8,6 +8,8 @@ import { Order } from '../entities/order.entity';
 //como se ha exportado como export default no es necesario los {}
 import config from '../../config';
 import { Client } from 'pg';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -17,18 +19,8 @@ export class UsersService {
     private configService: ConfigService,
     @Inject(config.KEY) private config_: ConfigType<typeof config>,
     @Inject('PG') private clientPG: Client,
+    @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
-
-  private counterId = 1;
-  private users: User[] = [
-    {
-      id: 1,
-      name: 'Dorelly',
-      user: 'dcrisanto',
-      email: 'dorelly.crisanto@gmail.com',
-      position: 'seller',
-    },
-  ];
 
   getTasks() {
     //retornando una Promesa nativa
@@ -48,11 +40,11 @@ export class UsersService {
     console.log(apiKey);
     const nameDataBase = this.config_.database.name;
     console.log(nameDataBase);
-    return this.users;
+    return this.userRepo.find();
   }
 
-  findUser(id: number) {
-    const user = this.users.find((element) => element.id === id);
+  async findUser(id: number) {
+    const user = await this.userRepo.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(`El usuario con el id ${id} no existe`);
     }
@@ -60,7 +52,7 @@ export class UsersService {
   }
 
   async getOrdersByUser(id: number) {
-    const user = this.findUser(id);
+    const user = await this.findUser(id);
     return {
       date: new Date(),
       user,
@@ -68,35 +60,20 @@ export class UsersService {
     };
   }
 
-  create(payload: CreateUserDto) {
-    this.counterId++;
-    const newUser = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.users.push(newUser);
-    return newUser;
+  create(data: CreateUserDto) {
+    const newUser = this.userRepo.create(data);
+    return this.userRepo.save(newUser);
   }
 
-  update(id: number, payload: UpdateUserDto) {
-    const user = this.findUser(id);
-    const index = this.users.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`El usuario con el id ${id} no existe`);
-    }
-    this.users[index] = {
-      ...user,
-      ...payload,
-    };
-    return this.users[index];
+  async update(id: number, changes: UpdateUserDto) {
+    const user = await this.findUser(id);
+    this.userRepo.merge(user, changes);
+    return this.userRepo.save(user);
   }
 
-  delete(id: number) {
-    const index = this.users.findIndex((item) => item.id === id);
-    if (index == -1) {
-      throw new NotFoundException(`Se usuario con el id ${id} no existe`);
-    }
-    this.users.splice(index, 1);
+  async delete(id: number) {
+    const user = await this.findUser(id);
+    this.userRepo.delete(id);
     return `El usuario con el id ${id} fue eliminado satisfactoriamente`;
   }
 }
