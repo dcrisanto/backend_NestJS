@@ -21,10 +21,10 @@ const API_KEY_PROD = 'PROD1234';
   imports: [
     TypeOrmModule.forRootAsync({
       inject: [config.KEY],
-      useFactory: (ConfigService: ConfigType<typeof config>) => {
-        const { user, password, dbName, host, port } = ConfigService.postgres;
+      useFactory: (configService: ConfigType<typeof config>) => {
+        const { user, password, dbName, host, port } = configService.mysql;
         return {
-          type: 'postgres', //indicar de forma explícita la DB
+          type: 'mysql', //indicar de forma explícita la DB
           host,
           port,
           username: user,
@@ -45,8 +45,8 @@ const API_KEY_PROD = 'PROD1234';
       provide: 'PG',
       //useValue: client,
       //Injección de dependencias, variables de entorno
-      useFactory: (ConfigService: ConfigType<typeof config>) => {
-        const { user, password, dbName, host, port } = ConfigService.postgres;
+      useFactory: (configService: ConfigType<typeof config>) => {
+        const { user, password, dbName, host, port } = configService.postgres;
         //creando una instancia de la conexión
         const client = new Client({
           host,
