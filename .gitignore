@@ -35,3 +35,8 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 *.env
+
+# carpeta mongo y msql
+/mongo_data
+/mysql_data
+/postgres_data
