@@ -29,11 +29,6 @@ export class UsersService {
   ];
 
   findAll() {
-    //también lo puedes tipar indicando que recibes un string
-    const apiKey = this.configService.get<string>('API_KEY');
-    console.log(apiKey);
-    const nameDataBase = this.config_.database.name;
-    console.log(nameDataBase);
     return this.users;
   }
 

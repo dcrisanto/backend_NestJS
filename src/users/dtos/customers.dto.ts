@@ -15,8 +15,4 @@ export class CreateCustomerDto {
   readonly user: string;
 }
 
-export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {
-  /* readonly name?: string;
-  readonly email?: string;
-  readonly user?: string; */
-}
+export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {}

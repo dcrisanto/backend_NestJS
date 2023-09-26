@@ -12,7 +12,4 @@ export class CreateBrandDto {
   readonly products: Product[];
 }
 
-export class UpdateBrandDto extends PartialType(CreateBrandDto) {
-  /* readonly name?: string;
-  readonly products: Array<Product>; */
-}
+export class UpdateBrandDto extends PartialType(CreateBrandDto) {}

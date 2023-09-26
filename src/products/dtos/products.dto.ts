@@ -44,11 +44,4 @@ export class CreateProductDto {
 }
 
 //Va a utilizar las mismas validaciones que CreateProductDto pero serán opcionales
-export class UpdateProductDto extends PartialType(CreateProductDto) {
-  // atriutos a actualizar opcionales
-  /* readonly name?: string;
-  readonly description?: string;
-  readonly price?: number;
-  readonly stock?: number;
-  readonly image?: string; */
-}
+export class UpdateProductDto extends PartialType(CreateProductDto) {}
