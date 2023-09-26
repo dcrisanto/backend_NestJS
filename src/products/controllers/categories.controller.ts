@@ -3,10 +3,7 @@ import { Controller, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
-import {
-  CreateCategoryDto,
-  UpdateCategoryDto,
-} from 'src/products/dtos/categories.dto';
+import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/categories.dto';
 import { CategoriesService } from 'src/products/services/categories.service';
 
 @ApiTags('categories')
