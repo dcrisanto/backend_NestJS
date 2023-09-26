@@ -2,9 +2,9 @@ import { Body, Delete, Get, Post, Put } from '@nestjs/common';
 import { Controller, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { ParseIntPipe } from 'src/common/parse-int/parse-int.pipe';
+import { ParseIntPipe } from '../../common/parse-int/parse-int.pipe';
 import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/categories.dto';
-import { CategoriesService } from 'src/products/services/categories.service';
+import { CategoriesService } from '../services/categories.service';
 
 @ApiTags('categories')
 @Controller('categories')

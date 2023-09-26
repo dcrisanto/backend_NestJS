@@ -1,9 +1,9 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ConfigType } from '@nestjs/config';
-import { ProductsService } from 'src/products/services/products.service';
-import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dto';
-import { User } from 'src/users/entities/user.entity';
+import { ProductsService } from '../../products/services/products.service';
+import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
+import { User } from '../entities/user.entity';
 import { Order } from '../entities/order.entity';
 //como se ha exportado como export default no es necesario los {}
 import config from '../../config';

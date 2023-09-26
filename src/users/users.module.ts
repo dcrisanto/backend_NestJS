@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ProductsModule } from 'src/products/products.module';
-import { CustomersService } from 'src/users/services/customers.service';
-import { UsersService } from 'src/users/services/users.service';
+import { ProductsModule } from '../products/products.module';
+import { CustomersService } from '../users/services/customers.service';
+import { UsersService } from '../users/services/users.service';
 import { CustomersController } from './controllers/customers.controller';
 import { UsersController } from './controllers/users.controller';
 

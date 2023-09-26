@@ -10,11 +10,8 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
-import {
-  CreateCustomerDto,
-  UpdateCustomerDto,
-} from 'src/users/dtos/customers.dto';
-import { CustomersService } from 'src/users/services/customers.service';
+import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customers.dto';
+import { CustomersService } from '../services/customers.service';
 
 @ApiTags('customers')
 @Controller('customers')
