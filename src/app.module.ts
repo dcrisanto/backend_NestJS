@@ -19,13 +19,6 @@ import config from './config';
       //enviando lo que queremos cargar
       load: [config],
       isGlobal: true,
-      //validación en tiempo de ejecución
-      validationSchema: Joi.object({
-        //colocamos el nombre que está en la variable de entorno
-        API_KEY: Joi.number().required(),
-        DATABASE_NAME: Joi.string().required(),
-        DATABASE_PORT: Joi.number().required(),
-      }),
     }),
     HttpModule,
     UsersModule,
